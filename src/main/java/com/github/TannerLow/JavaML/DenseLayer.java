@@ -42,9 +42,20 @@ public class DenseLayer implements Layer {
     }
 
     @Override
-    public void connect(Layer nextLayer) {
-        weights = new Matrix(size, nextLayer.getSize());
-        biases = new Matrix(1, nextLayer.getSize());
+    public Matrix getPreActivationValues() {
+        return preActivation;
+    }
+
+    @Override
+    public void connect(Layer previousLayer) {
+        weights = new Matrix(previousLayer.getSize(), size);
+        biases = new Matrix(1, size);
+    }
+
+    @Override
+    public void connect(int inputSize) {
+        weights = new Matrix(inputSize, size);
+        biases = new Matrix(1, size);
     }
 
     @Override
@@ -77,5 +88,27 @@ public class DenseLayer implements Layer {
         }
 
         return postActivation;
+    }
+
+    @Override
+    public void setWeights(Matrix newWeights) throws DimensionsMismatchException {
+        if(weights.rows != newWeights.rows || weights.cols != newWeights.cols) {
+            int[] dimensionsA = {weights.rows, weights.cols};
+            int[] dimensionsB = {newWeights.rows, newWeights.cols};
+            throw new DimensionsMismatchException(dimensionsA, dimensionsB);
+        }
+
+        weights = newWeights;
+    }
+
+    @Override
+    public void setBiases(Matrix newBiases) throws DimensionsMismatchException {
+        if(biases.rows != newBiases.rows || biases.cols != newBiases.cols) {
+            int[] dimensionsA = {biases.rows, biases.cols};
+            int[] dimensionsB = {newBiases.rows, newBiases.cols};
+            throw new DimensionsMismatchException(dimensionsA, dimensionsB);
+        }
+
+        biases = newBiases;
     }
 }
