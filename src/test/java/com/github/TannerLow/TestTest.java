@@ -30,19 +30,64 @@ public class TestTest {
             int programId = gpu.loadProgram(matricesKernelCode);
             gpu.loadKernel(programId, "Matrices", "matrixMultiply");
             gpu.loadKernel(programId, "Matrices", "addRowToRows");
+            gpu.loadKernel(programId, "Matrices", "addColToCols");
             gpu.loadKernel(programId, "Matrices", "relu");
-            gpu.loadKernel(programId, "Matrices", "softmax");
+            gpu.loadKernel(programId, "Matrices", "horizontalSoftmax");
+            gpu.loadKernel(programId, "Matrices", "verticalSoftmax");
 
+            System.out.println("Single input sample test:");
             NeuralNet net = new NeuralNet(2);
             Layer inputLayer = new DenseLayer(2, new Relu(), gpu);
             net.addLayer(inputLayer);
             Layer hiddenLayer = new DenseLayer(2, new Softmax(), gpu);
             net.addLayer(hiddenLayer);
-            net.compile();
+            net.compileAndRandomize();
 
             float[] inputData = {1, 0};
-            Matrix input = new Matrix(1, 2, inputData);
+            Matrix input = new Matrix(2, 1, inputData);
             Matrix output = net.predictVerbose(input);
+
+            System.out.println("\nModel Output:");
+            for(int i = 0; i < output.data.length; i++) {
+                System.out.println(output.data[i]);
+            }
+
+            System.out.println("\nMulti input sample test:");
+            net = new NeuralNet(2);
+            inputLayer = new DenseLayer(2, new Relu(), gpu);
+            net.addLayer(inputLayer);
+            hiddenLayer = new DenseLayer(2, new Softmax(), gpu);
+            net.addLayer(hiddenLayer);
+            net.compileAndRandomize();
+
+            inputData = new float[]{1, 0, 0, 1};
+            input = new Matrix(2, 2, inputData);
+            output = net.predictVerbose(input);
+
+            System.out.println("\nModel Output:");
+            for(int i = 0; i < output.data.length; i++) {
+                System.out.println(output.data[i]);
+            }
+
+            System.out.println("\nNon randomized test:");
+            net = new NeuralNet(2);
+            inputLayer = new DenseLayer(2, new Relu(), gpu);
+            net.addLayer(inputLayer);
+            hiddenLayer = new DenseLayer(2, new Softmax(), gpu);
+            net.addLayer(hiddenLayer);
+            net.compile();
+
+            float[] customBiasesData = {1, 1};
+            Matrix customBiases = new Matrix(2, 1, customBiasesData);
+            net.layers.get(0).setBiases(customBiases);
+
+            float[] customWeightsData = {1,0,0,0};
+            Matrix customWeights = new Matrix(2, 2, customWeightsData);
+            net.layers.get(1).setWeights(customWeights);
+
+            inputData = new float[]{1, 0, 0, 1};
+            input = new Matrix(2, 2, inputData);
+            output = net.predictVerbose(input);
 
             System.out.println("\nModel Output:");
             for(int i = 0; i < output.data.length; i++) {

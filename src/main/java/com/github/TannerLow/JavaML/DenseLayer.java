@@ -48,14 +48,14 @@ public class DenseLayer implements Layer {
 
     @Override
     public void connect(Layer previousLayer) {
-        weights = new Matrix(previousLayer.getSize(), size);
-        biases = new Matrix(1, size);
+        weights = new Matrix(size, previousLayer.getSize());
+        biases = new Matrix(size, 1);
     }
 
     @Override
     public void connect(int inputSize) {
-        weights = new Matrix(inputSize, size);
-        biases = new Matrix(1, size);
+        weights = new Matrix(size, inputSize);
+        biases = new Matrix(size, 1);
     }
 
     @Override
@@ -64,11 +64,11 @@ public class DenseLayer implements Layer {
             throw new NullPointerException();
         }
 
-        if(weights == null) {
+        if(weights == null || biases == null) {
             throw new NullPointerException();
         }
 
-        if(input.cols != weights.rows) {
+        if(input.rows != weights.cols) {
             int[] dimensionsA = {input.rows, input.cols};
             int[] dimensionsB = {weights.rows, weights.cols};
             throw new DimensionsMismatchException(dimensionsA, dimensionsB);
@@ -79,11 +79,11 @@ public class DenseLayer implements Layer {
         }
 
         if(gpu == null) {
-            preActivation = input.multiply(weights).addRowToRows(biases);
+            preActivation = weights.multiply(input).addColToCols(biases);
             postActivation = activationFunction.calculate(preActivation);
         }
         else {
-            preActivation = input.multiply(gpu, weights).addRowToRows(gpu, biases);
+            preActivation = weights.multiply(gpu, input).addColToCols(gpu, biases);
             postActivation = activationFunction.calculate(gpu, preActivation);
         }
 

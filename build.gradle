@@ -3,13 +3,14 @@ plugins {
 }
 
 group 'com.github.TannerLow'
-version '1.0-SNAPSHOT'
+version '0.1'
+description 'Machine Learning library.'
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
-    implementation 'com.github.TannerLow:JavaMatrixMath:0.4'
+    implementation 'com.github.TannerLow:JavaMatrixMath:0.5'
 }
 
 test {

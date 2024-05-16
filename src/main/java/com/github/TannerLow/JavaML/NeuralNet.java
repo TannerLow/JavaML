@@ -20,7 +20,7 @@ public class NeuralNet {
         layers.add(layer);
     }
 
-    public void compile() {
+    public void compileAndRandomize() {
         if(!layers.isEmpty()) {
             layers.get(0).connect(inputSize);
         }
@@ -30,6 +30,16 @@ public class NeuralNet {
         }
 
         randomizeWeightsAndBiases();
+    }
+
+    public void compile() {
+        if(!layers.isEmpty()) {
+            layers.get(0).connect(inputSize);
+        }
+
+        for(int i = 1; i < layers.size(); i++) {
+            layers.get(i).connect(layers.get(i-1));
+        }
     }
 
     public void randomizeWeightsAndBiases() {
@@ -71,8 +81,8 @@ public class NeuralNet {
     }
 
     public Matrix predictVerbose(Matrix input) {
-        if(layers.size() == 0) {
-            return null;
+        if(layers.isEmpty()) {
+            return null; // or maybe just return input
         }
 
         for(Layer layer : layers) {

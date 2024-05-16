@@ -11,11 +11,11 @@ public class Softmax implements ActivationFunction {
 
     @Override
     public Matrix calculate(Matrix input) {
-        return input.softmax();
+        return input.verticalSoftmax();
     }
 
     @Override
     public Matrix calculate(GPU gpu, Matrix input) {
-        return input.softmax(gpu);
+        return input.verticalSoftmax(gpu);
     }
 }
