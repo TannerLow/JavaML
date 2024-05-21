@@ -111,4 +111,13 @@ public class DenseLayer implements Layer {
 
         biases = newBiases;
     }
+
+    @Override
+    public Layer copy() {
+        Layer layer = new DenseLayer(size, activationFunction, gpu);
+        layer.connect(weights.cols);
+        System.arraycopy(weights.data, 0, layer.getWeights().data, 0, weights.data.length);
+        System.arraycopy(biases.data, 0, layer.getBiases().data, 0, biases.data.length);
+        return layer;
+    }
 }

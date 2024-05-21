@@ -20,4 +20,6 @@ public interface Layer {
     void setWeights(Matrix newWeights);
 
     void setBiases(Matrix newBiases);
+
+    Layer copy();
 }

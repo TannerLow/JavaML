@@ -112,4 +112,14 @@ public class NeuralNet {
 
         return input;
     }
+
+    public NeuralNet copy() {
+        NeuralNet newNet = new NeuralNet(inputSize);
+
+        for(Layer layer : layers) {
+            newNet.layers.add(layer.copy());
+        }
+
+        return newNet;
+    }
 }
