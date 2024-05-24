@@ -63,8 +63,8 @@ public class NeuralNet {
     }
 
     public Matrix predict(Matrix input) throws DimensionsMismatchException {
-        if(input.cols != inputSize) {
-            int[] dimensionsA = {input.cols};
+        if(input.rows != inputSize) {
+            int[] dimensionsA = {input.rows};
             int[] dimensionsB = {inputSize};
             throw new DimensionsMismatchException(dimensionsA, dimensionsB);
         }

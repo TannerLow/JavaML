@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.TannerLow'
-version '0.5'
+version '0.5.1'
 description 'Machine Learning library.'
 
 dependencies {

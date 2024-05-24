@@ -85,9 +85,10 @@ public class TestTest {
             Matrix customWeights = new Matrix(2, 2, customWeightsData);
             net.layers.get(1).setWeights(customWeights);
 
-            inputData = new float[]{1, 0, 0, 1};
-            input = new Matrix(2, 2, inputData);
-            output = net.predictVerbose(input);
+            inputData = new float[]{1, 0, 0, 1, 0, 0};
+            input = new Matrix(2, 3, inputData);
+            //output = net.predictVerbose(input);
+            output = net.predict(input);
 
             System.out.println("\nModel Output:");
             for(int i = 0; i < output.data.length; i++) {
